@@ -41,16 +41,7 @@ module PayPal::SDK::Core
       def configure_ssl(http)
         http.tap do |https|
           https.use_ssl = true
-          https.ca_file = default_ca_file
           https.verify_mode = OpenSSL::SSL::VERIFY_PEER
-          begin
-            https.ssl_version = :TLSv1_2
-          rescue => error
-            logger.warn("WARNING: Your system does not support TLSv1.2. Per PCI Security Council mandate (https://github.com/paypal/TLS-update), you MUST update to latest security library.")
-          end
-          config.ssl_options.each do |key, value|
-            http.send("#{key}=", value)
-          end
           add_certificate(https)
         end
       end
